@@ -1,15 +1,48 @@
 
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Geração Automática de Pedidos de Serviços</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <h1>Geração Automática de Pedidos de Serviços</h1>
-    <button id="gerarCliente">Gerar Cliente</button>
-    <div id="resultado"></div>
-    
-    <script src="script.js"></script>
-  </body>
+<head>
+<title>Gerador de Clientes Fictícios</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Gerador de Clientes Fictícios</h1>
+<form action="index.php" method="post">
+  <input type="text" name="nome" placeholder="Nome do Cliente">
+  <input type="text" name="email" placeholder="Endereço de Email do Cliente">
+  <input type="text" name="telefone" placeholder="Telefone do Cliente">
+  <input type="text" name="descricao" placeholder="Descrição do Projeto">
+  <input type="submit" value="Gerar Cliente">
+</form>
+
+<?php
+// Verifica se o formulário foi enviado
+if (isset($_POST['nome']) && isset($_POST['email']) && isset($_POST['telefone']) && isset($_POST['descricao'])) {
+  // Gera um cliente fictício
+  $cliente = array(
+    'nome' => $_POST['nome'],
+    'email' => $_POST['email'],
+    'telefone' => $_POST['telefone'],
+    'descricao' => $_POST['descricao']
+  );
+
+  // Imprime o cliente no navegador
+  echo '<h2>Cliente Fictício</h2>';
+  echo '<ul>';
+  echo '<li>Nome: ' . $cliente['nome'] . '</li>';
+  echo '<li>Email: ' . $cliente['email'] . '</li>';
+  echo '<li>Telefone: ' . $cliente['telefone'] . '</li>';
+  echo '<li>Descrição do Projeto: ' . $cliente['descricao'] . '</li>';
+  echo '</ul>';
+}
+?>
+
+</body>
 </html>
+Use o código com cuidado. Saiba mais
+O código acima criará uma aplicação com um formulário que você pode usar para gerar clientes fictícios. Quando você enviar o formulário, o código criará um novo cliente e imprimirá os detalhes do cliente no navegador. Você pode então usar esses detalhes para criar um projeto de design gráfico e adicionar ao seu portfólio.
+
+Espero que isso ajude!
+
+Digite uma pergunta ou comando
+O Bard pode apresentar informações imprecisas ou ofensivas que não representam as 
