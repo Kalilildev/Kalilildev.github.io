@@ -1,62 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Inspiração para criação de jogos</title>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Planos de Interação Exclusivos com Ren</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Inspiração para criação de jogos</h1>
+    <header>
+        <h1>Planos Exclusivos para Conversar com Ren!</h1>
+        <p class="intro">Escolha seu plano antes que o tempo acabe!</p>
+    </header>
 
-        <div class="games">
-            <h2>Jogos 2D:</h2>
-            <ul class="games-list" id="gamesList">
-<li><span class="game-name">Super Mario Bros.</span> - <span class="game-description">Ajude o Mario a resgatar a princesa Peach.</span></li>
-<li><span class="game-name">The Legend of Zelda</span> - <span class="game-description">Aventure-se em uma jornada épica com o herói Link.</span></li>
-<li><span class="game-name">Sonic the Hedgehog</span> - <span class="game-description">Corra e colete anéis dourados enquanto enfrenta o Dr. Robotnik.</span></li>
-<li><span class="game-name">Donkey Kong</span> - <span class="game-description">Ajude o macaco Donkey Kong a resgatar a princesa.</span></li>
-<li><span class="game-name">Pac-Man</span> - <span class="game-description">Coma todos os pontos em um labirinto enquanto evita fantasmas.</span></li>
-<li><span class="game-name">Castlevania</span> - <span class="game-description">Explore um castelo assombrado e derrote criaturas das trevas.</span></li>
-<li><span class="game-name">Street Fighter</span> - <span class="game-description">Participe de torneios de luta com personagens carismáticos.</span></li>
-<li><span class="game-name">Mega Man</span> - <span class="game-description">Destrua robôs malignos com a ajuda do herói androide Mega Man.</span></li>
-<li><span class="game-name">Contra</span> - <span class="game-description">Lute contra uma invasão alienígena para salvar o mundo.</span></li>
-<li><span class="game-name">Tetris</span> - <span class="game-description">Encaixe blocos para completar linhas e ganhar pontos.</span></li>
-<li><span class="game-name">Metroid</span> - <span class="game-description">Explore planetas alienígenas e lute contra criaturas perigosas.</span></li>
-<li><span class="game-name">Kirby's Adventure</span> - <span class="game-description">Ajude Kirby a salvar Dream Land de inimigos malvados.</span></li>
-<li><span class="game-name">Mega Man X</span> - <span class="game-description">Domine novas habilidades e lute contra chefes poderosos.</span></li>
-<li><span class="game-name">EarthBound</span> - <span class="game-description">Embarque em uma viagem emocionante para derrotar uma entidade alienígena maligna.</span></li>
-<li><span class="game-name">Pokemon Red/Blue</span> - <span class="game-description">Capture e treine criaturas conhecidas como Pokémon em uma jornada para se tornar um Mestre Pokémon.</span></li>
-<li><span class="game-name">Super Metroid</span> - <span class="game-description">Aventure-se em um planeta desconhecido e lute contra inimigos mortais.</span></li>
-<li><span class="game-name">Final Fantasy VI</span> - <span class="game-description">Junte-se a um grupo de heróis em uma batalha épica contra o mal.</span></li>
-<li><span class="game-name">The Sims</span> - <span class="game-description">Crie uma vida virtual e gerencie as necessidades e desejos de seus Sims.</span></li>
-<li><span class="game-name">Chrono Trigger</span> - <span class="game-description">Viaje no tempo para impedir o fim do mundo.</span></li>
-<li><span class="game-name">Bomberman</span> - <span class="game-description">Plante bombas para destruir obstáculos e inimigos.</span></li>
-<li><span class="game-name">Golden Axe</span> - <span class="game-description">Embarque em uma missão para derrotar um tirano maligno e salvar o reino.</span></li>
-<li><span class="game-name">Diablo</span> - <span class="game-description">Explore masmorras repletas de monstros e encontre tesouros valiosos.</span></li>
-<li><span class="game-name">Prince of Persia</span> - <span class="game-description">Ultrapasse obstáculos mortais para resgatar a princesa das garras do vizir malvado.</span></li>
-<li><span class="game-name">Castlevania: Symphony of the Night</span> - <span class="game-description">Lute contra criaturas sobrenaturais em um castelo assombrado.</span></li>
-<li><span class="game-name">Metal Slug</span> - <span class="game-description">Participe de guerras intensas e aniquile as forças inimigas.</span></li>
-<li><span class="game-name">Super Smash Bros.</span> - <span class="game-description">Enfrente personagens icônicos em uma arena de batalha.</span></li>
-<li><span class="game-name">Stardew Valley</span> - <span class="game-description">Cultive sua própria fazenda, pesque e explore a cidade local.</span></li>
-<li><span class="game-name">Minecraft</span> - <span class="game-description">Construa seu próprio mundo utilizando blocos e explore lugares desconhecidos.</span></li>
-<li><span class="game-name">Rayman</span> - <span class="game-description">Ajude Rayman a salvar o mundo da escuridão usando seus poderes mágicos.</span></li>
-<li><span class="game-name">The Binding of Isaac</span> - <span class="game-description">Desvende segredos sombrios em masmorras perigosas.</span></li>
-<li><span class="game-name">Limbo</span> - <span class="game-description">Enfrente armadilhas mortais em uma jornada sombria em preto e branco.</span></li>
-<li><span class="game-name">Fez</span> - <span class="game-description">Explore um mundo tridimensional e desvende enigmas complexos.</span></li>
-            </ul>
-            
-            <div class="game-add-form">
-                <input type="text" id="newGame" placeholder="Nome do jogo">
-                <input type="text" id="newGameDescription" placeholder="Descrição do jogo">
-                <button class="button" onclick="addGame()">Adicionar</button>
+    <!-- Temporizador -->
+    <div class="timer">
+        <p><strong>Oferta expira em:</strong> <span id="countdown">05:00</span></p>
+    </div>
+
+    <!-- Carrossel de Planos -->
+    <div class="carousel">
+        <button onclick="prevPlan()">&#10094;</button>
+        
+        <div class="plan-container">
+            <!-- Planos Dinâmicos -->
+            <div id="plan1" class="plan" onclick="showPlanDetails('Básico')">
+                <h2>Plano Básico</h2>
+                <p>Ideal para quem está começando! <span class="more">Clique para ver mais</span></p>
             </div>
-            
-            <div id="inspiration" class="hidden"></div>
+
+            <div id="plan2" class="plan" onclick="showPlanDetails('Pro')">
+                <h2>Plano Pro</h2>
+                <p>Com direito a áudio e mais mensagens! <span class="more">Clique para ver mais</span></p>
+            </div>
+
+            <div id="plan3" class="plan" onclick="showPlanDetails('Pro+')">
+                <h2>Plano Pro+</h2>
+                <p>Mensagens ilimitadas e jogue com Ren. <span class="more">Clique para ver mais</span></p>
+            </div>
+
+            <div id="plan4" class="plan" onclick="showPlanDetails('Ultimate')">
+                <h2>Plano Ultimate</h2>
+                <p>Interações ilimitadas e ligações 24h. <span class="more">Clique para ver mais</span></p>
+            </div>
+
+            <!-- Novos Planos -->
+            <div id="plan5" class="plan" onclick="showPlanDetails('VIP')">
+                <h2>Plano VIP</h2>
+                <p>Acesso total + encontros semanais! <span class="more">Clique para ver mais</span></p>
+            </div>
+
+            <div id="plan6" class="plan" onclick="showPlanDetails('Master')">
+                <h2>Plano Master</h2>
+                <p>Interações personalizadas e fotos exclusivas. <span class="more">Clique para ver mais</span></p>
+            </div>
         </div>
-         <button class="button" onclick="generateInspiration()">Gerar Inspiração</button>
-                </div>
+
+        <button onclick="nextPlan()">&#10095;</button>
+    </div>
+
+    <!-- Notificações de Compra e Contador de Pessoas Online -->
+    <div class="notifications">
+        <p><span id="onlineCount">47</span> pessoas estão online agora</p>
+        <div id="notificationBar"></div>
+    </div>
+
+    <!-- Pop-up de Detalhes do Plano -->
+    <div id="planDetails" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closePlanDetails()">&times;</span>
+            <h2 id="planTitle"></h2>
+            <p id="planDescription"></p>
+            <p><strong>Formas de recarga:</strong> Pix, Boleto ou Cartão de Crédito</p>
+            <button id="rechargeButton">Recarregar Agora</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
-  </html>
+</html>
