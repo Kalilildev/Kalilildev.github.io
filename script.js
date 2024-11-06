@@ -1,107 +1,35 @@
-// Função para inicializar os jogos salvos do armazenamento local
-function initializeSavedGames() {
-  var savedGames = localStorage.getItem("games");
+// Temporizador de urgência
+let timer = 300;
+const countdown = document.getElementById("countdown");
 
-  if (savedGames) {
-    var games = JSON.parse(savedGames);
-    var gamesList = document.getElementById("gamesList");
-
-    for (var i = 0; i < games.length; i++) {
-      addGameToDOM(games[i], i);
+setInterval(() => {
+    if (timer > 0) {
+        timer--;
+        const minutes = Math.floor(timer / 60);
+        const seconds = timer % 60;
+        countdown.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    } else {
+        countdown.textContent = "Oferta expirada!";
     }
-  }
-}
+}, 1000);
 
-// Função para salvar os jogos no armazenamento local
-function saveGamesToLocalStorage(games) {
-  localStorage.setItem("games", JSON.stringify(games));
-}
+// Notificações de Compras
+const notificationBar = document.getElementById("notificationBar");
+const onlineCount = document.getElementById("onlineCount");
 
-// Adicionar um novo jogo ao DOM e ao armazenamento local
-function addGame() {
-  var gameInput = document.getElementById("newGame");
-  var gameName = gameInput.value.trim();
+setInterval(() => {
+    onlineCount.textContent = Math.floor(Math.random() * 100) + 30;
+}, 5000);
 
-  if (gameName !== "") {
-    var gameDescriptionInput = document.getElementById("newGameDescription");
-    var gameDescription = gameDescriptionInput.value.trim();
+setInterval(() => {
+    const messages = [
+        "João comprou o Plano VIP!",
+        "Maria recarregou o Plano Básico.",
+        "Rafael adquiriu o Plano Master!",
+        "Ana garantiu o Plano Ultimate."
+    ];
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    notificationBar.textContent = randomMessage;
+}, 4000);
 
-    var gamesList = document.getElementById("gamesList");
-
-    // Salvar o novo jogo no armazenamento local
-    var savedGames = localStorage.getItem("games");
-    var games = [];
-
-    if (savedGames) {
-      games = JSON.parse(savedGames);
-    }
-
-    games.push({ name: gameName, description: gameDescription });
-    saveGamesToLocalStorage(games);
-
-    // Adiciona o novo jogo ao DOM
-    addGameToDOM({ name: gameName, description: gameDescription }, games.length - 1);
-
-    // Limpar os campos de entrada
-    gameInput.value = "";
-    gameDescriptionInput.value = "";
-  }
-}
-
-// Adicionar um jogo ao DOM
-function addGameToDOM(game, index) {
-  var gamesList = document.getElementById("gamesList");
-  var newGameItem = document.createElement("li");
-  newGameItem.innerHTML =
-    '<span class="game-name">' +
-    game.name +
-    '</span> - <span class="game-description">' +
-    game.description +
-    '</span><button class="delete-button" onclick="deleteGame(' +
-    index +
-    ')">Apagar</button>';
-  gamesList.appendChild(newGameItem);
-}
-
-// Deletar um jogo
-function deleteGame(index) {
-  var gamesList = document.getElementById("gamesList");
-  var games = JSON.parse(localStorage.getItem("games"));
-
-  // Verifica se o índice é válido antes de deletar
-  if (index >= 0 && index < games.length) {
-    games.splice(index, 1);
-    saveGamesToLocalStorage(games);
-
-    // Remove o jogo do DOM
-    gamesList.innerHTML = "";
-    initializeSavedGames();
-  }
-}
-
-// Gerar inspiração
-function generateInspiration() {
-  var gamesList = document.getElementById("gamesList");
-  var games = gamesList.getElementsByTagName("li");
-  var randomIndex1 = Math.floor(Math.random() * games.length);
-  var randomIndex2 = Math.floor(Math.random() * games.length);
-
-  while (randomIndex2 === randomIndex1) {
-    randomIndex2 = Math.floor(Math.random() * games.length);
-  }
-
-  var game1 = games[randomIndex1].getElementsByClassName("game-name")[0].innerText;
-  var game2 = games[randomIndex2].getElementsByClassName("game-name")[0].innerText;
-
-  var inspirationContainer = document.getElementById("inspiration");
-  inspirationContainer.innerHTML =
-    "<h3>Inspire-se nos jogos:</h3><p><strong>" +
-    game1 +
-    "</strong></p><p><strong>" +
-    game2 +
-    "</strong></p>";
-  inspirationContainer.classList.remove("hidden");
-}
-
-// Chamada da função para inicializar os jogos salvos
-initializeSavedGames();
+// Carrossel Autom
