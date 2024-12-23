@@ -3,78 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planos de Interação Exclusivos com Ren</title>
+    <title>Simulação de Astigmatismo</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Planos Exclusivos para Conversar com Ren!</h1>
-        <p class="intro">Escolha seu plano antes que o tempo acabe!</p>
-    </header>
-
-    <!-- Temporizador -->
-    <div class="timer">
-        <p><strong>Oferta expira em:</strong> <span id="countdown">05:00</span></p>
-    </div>
-
-    <!-- Carrossel de Planos -->
-    <div class="carousel">
-        <button onclick="prevPlan()">&#10094;</button>
-        
-        <div class="plan-container">
-            <!-- Planos Dinâmicos -->
-            <div id="plan1" class="plan" onclick="showPlanDetails('Básico')">
-                <h2>Plano Básico</h2>
-                <p>Ideal para quem está começando! <span class="more">Clique para ver mais</span></p>
-            </div>
-
-            <div id="plan2" class="plan" onclick="showPlanDetails('Pro')">
-                <h2>Plano Pro</h2>
-                <p>Com direito a áudio e mais mensagens! <span class="more">Clique para ver mais</span></p>
-            </div>
-
-            <div id="plan3" class="plan" onclick="showPlanDetails('Pro+')">
-                <h2>Plano Pro+</h2>
-                <p>Mensagens ilimitadas e jogue com Ren. <span class="more">Clique para ver mais</span></p>
-            </div>
-
-            <div id="plan4" class="plan" onclick="showPlanDetails('Ultimate')">
-                <h2>Plano Ultimate</h2>
-                <p>Interações ilimitadas e ligações 24h. <span class="more">Clique para ver mais</span></p>
-            </div>
-
-            <!-- Novos Planos -->
-            <div id="plan5" class="plan" onclick="showPlanDetails('VIP')">
-                <h2>Plano VIP</h2>
-                <p>Acesso total + encontros semanais! <span class="more">Clique para ver mais</span></p>
-            </div>
-
-            <div id="plan6" class="plan" onclick="showPlanDetails('Master')">
-                <h2>Plano Master</h2>
-                <p>Interações personalizadas e fotos exclusivas. <span class="more">Clique para ver mais</span></p>
-            </div>
+    <div class="container">
+        <h1>Simulação de Astigmatismo</h1>
+        <p id="info">Ajuste o controle deslizante para simular diferentes graus de astigmatismo. Consulte um especialista para um diagnóstico preciso.</p>
+        <div class="simulation">
+            <img id="image" src="ka.jpg" alt="Imagem para simular astigmatismo">
+            <p id="text-simulation">Este é um texto para simular como a leitura é afetada pelo astigmatismo.</p>
         </div>
-
-        <button onclick="nextPlan()">&#10095;</button>
-    </div>
-
-    <!-- Notificações de Compra e Contador de Pessoas Online -->
-    <div class="notifications">
-        <p><span id="onlineCount">47</span> pessoas estão online agora</p>
-        <div id="notificationBar"></div>
-    </div>
-
-    <!-- Pop-up de Detalhes do Plano -->
-    <div id="planDetails" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closePlanDetails()">&times;</span>
-            <h2 id="planTitle"></h2>
-            <p id="planDescription"></p>
-            <p><strong>Formas de recarga:</strong> Pix, Boleto ou Cartão de Crédito</p>
-            <button id="rechargeButton">Recarregar Agora</button>
+        <div class="slider-container">
+            <label for="astigmatism-level">Nível de Astigmatismo:</label>
+            <input type="range" id="astigmatism-level" min="0" max="10" step="0.1" value="0">
+            <span id="degree-value">0.00</span> graus
+        </div>
+        <div class="check-lens">
+            <label for="lens-degree">Informe o grau dos seus óculos:</label>
+            <input type="number" id="lens-degree" placeholder="Ex.: 1.75" step="0.25">
+            <button id="check-button">Validar</button>
+            <p id="validation-result"></p>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
