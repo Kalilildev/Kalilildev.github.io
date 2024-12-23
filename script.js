@@ -1,35 +1,38 @@
-// Temporizador de urgência
-let timer = 300;
-const countdown = document.getElementById("countdown");
+const image = document.getElementById('image');
+const textSimulation = document.getElementById('text-simulation');
+const slider = document.getElementById('astigmatism-level');
+const degreeValueDisplay = document.getElementById('degree-value');
+const lensDegreeInput = document.getElementById('lens-degree');
+const checkButton = document.getElementById('check-button');
+const validationResult = document.getElementById('validation-result');
 
-setInterval(() => {
-    if (timer > 0) {
-        timer--;
-        const minutes = Math.floor(timer / 60);
-        const seconds = timer % 60;
-        countdown.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+// Conversão de desfoque (px) para graus (aproximadamente 1px = 0.25 graus)
+function convertPxToDegree(px) {
+    return (px * 0.25).toFixed(2);
+}
+
+// Atualiza o desfoque e exibe o valor em graus
+slider.addEventListener('input', () => {
+    const blurValue = slider.value;
+    const degreeValue = convertPxToDegree(blurValue);
+    image.style.filter = `blur(${blurValue}px)`;
+    textSimulation.style.filter = `blur(${blurValue}px)`;
+    degreeValueDisplay.textContent = `${degreeValue}`;
+});
+
+// Valida o grau informado pelo usuário
+checkButton.addEventListener('click', () => {
+    const lensDegree = parseFloat(lensDegreeInput.value);
+    const currentDegree = parseFloat(degreeValueDisplay.textContent);
+
+    if (!lensDegree || lensDegree <= 0) {
+        validationResult.textContent = "Por favor, insira um valor válido!";
+        validationResult.style.color = "#d32f2f";
+    } else if (Math.abs(lensDegree - currentDegree) <= 0.25) {
+        validationResult.textContent = "O grau dos seus óculos está bem próximo!";
+        validationResult.style.color = "#00796b";
     } else {
-        countdown.textContent = "Oferta expirada!";
+        validationResult.textContent = "Pode haver uma diferença significativa no grau!";
+        validationResult.style.color = "#d32f2f";
     }
-}, 1000);
-
-// Notificações de Compras
-const notificationBar = document.getElementById("notificationBar");
-const onlineCount = document.getElementById("onlineCount");
-
-setInterval(() => {
-    onlineCount.textContent = Math.floor(Math.random() * 100) + 30;
-}, 5000);
-
-setInterval(() => {
-    const messages = [
-        "João comprou o Plano VIP!",
-        "Maria recarregou o Plano Básico.",
-        "Rafael adquiriu o Plano Master!",
-        "Ana garantiu o Plano Ultimate."
-    ];
-    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-    notificationBar.textContent = randomMessage;
-}, 4000);
-
-// Carrossel Autom
+});
