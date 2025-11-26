@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Oficial Rihomo Messejana</title>
+    <!-- Incluindo Tailwind CSS para estilização moderna e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Incluindo Icones Lucide -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* Configuração de fonte customizada (Inter) e cores para o tema - PREMIUM DARK MODE */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        :root {
+            --primary-color: #7c3aed; /* Violeta 600 - Roxo principal */
+            --secondary-color: #4c1d95; /* Violeta 900 - Roxo mais escuro */
+            --background-start: #0a0414; /* Roxo Quase Preto, bem profundo */
+            --background-end: #1e0c33;   /* Roxo escuro sutil */
+            --accent-color: #34d399; /* Emerald 400 - Cor de destaque/Sucesso */
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom, var(--background-start), var(--background-end));
+            background-attachment: fixed;
+            color: #e0f2fe;
+        }
+        
+        #main-container-wrapper {
+            background-color: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .product-card {
+            background-color: #1a1a2e; /* Azul/Roxo escuro para o card */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        /* Borda vermelha para produtos promocionais */
+        .product-card.promocional-border {
+            border: 2px solid #ef4444; /* Vermelho 500 */
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5); /* Sombra vermelha sutil */
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+        }
+        
+        /* Imagem em formato 1:1 (Quadrada) */
+        .product-image-container {
+            aspect-ratio: 1 / 1; 
+            height: auto;
+            position: relative;
+        }
+        .product-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Banner Carousel Styling */
+        #banner-carousel {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            /* Proporção 1200x480 */
+            aspect-ratio: 1200 / 480; 
+            max-height: 480px;
+            margin-bottom: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            background-color: #1f2937;
+        }
+
+        .carousel-track {
+            display: flex;
+            /* A transição será controlada via JS para o loop infinito */
+            height: 100%;
+        }
+
+        .carousel-slide {
+            flex-shrink: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .size-badge {
+            background-color: #374151;
+            color: #d1d5db;
+            padding: 2px 8px; /* Ajuste para ser menor */
+            border-radius: 6px;
+            font-size: 0.75rem; /* Ajuste para ser menor */
+        }
+
+        .price-badge {
+            display: inline-flex;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.1rem 0.5rem;
+            border-radius: 0.5rem;
+            margin-top: 0.25rem;
+        }
+
+        .price-badge.varejo { background-color: #4b5563; color: white; }
+        .price-badge.atacado { background-color: #fbbf24; color: #1f2937; }
+        /* A cor de Microfranquia é a cor de destaque (accent-color) */
+        .price-badge.microfranquia { background-color: var(--accent-color); color: #1f2937; } 
+
+        /* Estilo para o modal de zoom de imagem e Loading Spinner */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.9); animation: fadeIn 0.3s; }
+        .modal-content { margin: auto; display: block; width: 90%; max-width: 700px; max-height: 90vh; object-fit: contain; animation: zoomIn 0.3s; }
+        .close-button { position: absolute; top: 15px; right: 35px; color: #f1f1f1; font-size: 40px; font-weight: bold; transition: 0.3s; cursor: pointer; }
+        .close-button:hover, .close-button:focus { color: #bbb; text-decoration: none; }
+        
+        .spinner { border: 4px solid rgba(255, 255, 255, 0.3); border-top: 4px solid var(--primary-color); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+        @keyframes zoomIn { from {transform: scale(0.5);} to {transform: scale(1);} }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Ajustes para telas muito pequenas (mobile) para o card ficar mais compacto */
+        @media (max-width: 639px) { 
+            .product-card-content-mobile {
+                padding: 0.75rem; /* Diminui o padding do card */
+            }
+            .product-name-mobile {
+                font-size: 0.875rem; /* text-sm */
+            }
+            .product-code-category-mobile {
+                font-size: 0.625rem; /* text-[10px] */
+            }
+            .product-price-mobile {
+                font-size: 1.5rem; /* text-2xl */
+            }
+        }
+        
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <!-- Modal para Zoom de Imagem -->
+    <div id="image-zoom-modal" class="modal">
+        <span class="close-button">&times;</span>
+        <img class="modal-content" id="modal-image">
+        <div id="modal-caption" class="text-center text-white text-xl mt-4"></div>
+    </div>
+
+    <div id="main-container-wrapper" class="max-w-7xl mx-auto p-4 sm:p-8 rounded-xl shadow-2xl min-h-screen">
+        
+        <!-- Banner Carousel -->
+        <div id="banner-carousel" class="mb-10">
+            <div class="carousel-track" id="carousel-track">
+                <!-- Slides serão inseridos aqui pelo JS -->
+            </div>
+        </div>
+
+        <!-- Cabeçalho (Header) -->
+        <header class="text-center mb-10 border-b border-gray-600 pb-6">
+            <h1 class="text-5xl sm:text-6xl font-extrabold text-white leading-tight">
+                Rihomo Messejana
+            </h1>
+            <p class="text-2xl sm:text-3xl font-extrabold mt-1">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-accent-color">
+                    Catálogo Oficial
+                </span>
+            </p>
+            <!-- Contagem de Acessos REMOVIDA para evitar dependência do Firebase. -->
+        </header>
+
+        <!-- Filtros e Pesquisa -->
+        <div class="flex flex-col sm:flex-row gap-4 mb-8">
+            <input type="text" id="search-input" placeholder="Pesquisar por nome ou código..." class="w-full sm:w-1/2 p-3 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:ring-purple-500 focus:border-purple-500 transition duration-150 shadow-md">
+            
+            <select id="category-filter" class="w-full sm:w-1/4 p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 transition duration-150 shadow-md">
+                <option value="all">Todas as Categorias</option>
+            </select>
+            
+            <select id="sort-order" class="w-full sm:w-1/4 p-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-purple-500 focus:border-purple-500 transition duration-150 shadow-md">
+                <option value="default">Ordem Padrão</option>
+                <option value="price-asc">Preço: Menor para Maior</option>
+                <option value="price-desc">Preço: Maior para Menor</option>
+                <option value="name-asc">Nome: A-Z</option>
+            </select>
+        </div>
+
+        <!-- Indicador de Carregamento -->
+        <div id="loading-indicator" class="flex justify-center items-center py-12">
+            <div class="spinner"></div>
+            <p class="ml-4 text-purple-300">Carregando dados do catálogo...</p>
+        </div>
+
+        <!-- Grid de Produtos -->
+        <div id="product-list" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8">
+            <!-- Os cards dos produtos serão inseridos aqui -->
+        </div>
+
+        <!-- Mensagem de Sem Resultados (Escondida por padrão) -->
+        <div id="no-results-message" class="hidden text-center mt-12 p-8 bg-gray-800 rounded-xl">
+            <p class="text-xl font-semibold text-red-400">Nenhum produto encontrado.</p>
+            <p class="text-gray-400 mt-2">Tente ajustar seus filtros ou termos de pesquisa.</p>
+        </div>
+
+    </div>
+
+    <!-- Rodapé com Contato e Políticas -->
+    <footer id="contact-policy" class="max-w-7xl mx-auto mt-12 p-6 rounded-xl bg-gray-900 shadow-xl border border-gray-700">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
+            
+            <!-- Contato Rápido -->
+            <div class="space-y-3">
+                <h3 class="font-bold text-xl text-purple-400 flex items-center justify-center md:justify-start">
+                    <i data-lucide="phone-call" class="w-5 h-5 mr-2 text-accent-color"></i> Fale Conosco
+                </h3>
+                <p class="text-gray-300 flex items-center justify-center md:justify-start">
+                    <i data-lucide="map-pin" class="w-4 h-4 mr-2 text-gray-500"></i>
+                    Rua Eduardo Porto, 540 - Messejana, Fortaleza
+                </p>
+                <p class="text-gray-300 flex items-center justify-center md:justify-start">
+                    <i data-lucide="clock" class="w-4 h-4 mr-2 text-gray-500"></i>
+                    **Horário:** Seg-Sex: 8h às 17h | Sáb: 8h às 14h
+                </p>
+                <a id="whatsapp-link-footer" href="#" target="_blank" class="inline-flex items-center justify-center w-full md:w-auto mt-2 px-6 py-2 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition duration-200 shadow-lg">
+                    <i data-lucide="message-circle" class="w-5 h-5 mr-2"></i> WhatsApp Direto
+                </a>
+            </div>
+
+            <!-- Políticas de Preço -->
+            <div class="space-y-3 md:col-span-2 md:pl-8 border-t md:border-t-0 md:border-l border-gray-700 pt-6 md:pt-0">
+                <h3 class="font-bold text-xl text-purple-400 flex items-center justify-center md:justify-start">
+                    <i data-lucide="tags" class="w-5 h-5 mr-2 text-accent-color"></i> Políticas de Preço
+                </h3>
+                <div class="text-gray-300 text-sm space-y-2 text-left">
+                    <p class="font-semibold text-white">Varejo:</p>
+                    <ul class="list-disc list-inside ml-2">
+                        <li>Preço padrão, sem mínimo de compra.</li>
+                    </ul>
+                    
+                    <p class="font-semibold text-white">Atacado:</p>
+                    <ul class="list-disc list-inside ml-2">
+                        <li>**Desconto de até 30%** (Preço 2) sobre o preço de Varejo.</li>
+                        <li>Válido para compras a partir de **<span class="text-yellow-400 font-bold" id="atacado-min-value">R$ 0,00</span>** no total do pedido (sem considerar descontos).</li>
+                    </ul>
+
+                    <p class="font-semibold text-white">Microfranquia (50% OFF):</p>
+                    <ul class="list-disc list-inside ml-2">
+                        <li>**Desconto de 50%** (Preço 3) sobre o preço de Varejo.</li>
+                        <li>Válido para compras a partir de **<span class="text-accent-color font-bold" id="micro-min-value">R$ 0,00</span>** no total do pedido (sem considerar descontos).</li>
+                        <li><span class="text-xs text-gray-400">Ex: Uma compra de R$ 400,00 (valor Varejo) resulta em pagamento de R$ 200,00.</span></li>
+                    </ul>
+
+                    <p class="font-semibold text-white mt-4 text-red-400">🚨 Atenção (Peças Promocionais):</p>
+                    <ul class="list-disc list-inside ml-2 text-red-300">
+                        <li>Produtos com "Preço Final" (identificados com a **borda vermelha** no catálogo) já estão com o melhor preço e não recebem descontos adicionais de Atacado ou Microfranquia.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <p class="mt-8 text-center text-xs text-gray-500 border-t border-gray-800 pt-4">
+            &copy; 2024 Catálogo Rihomo Messejana. Todos os direitos reservados.
+        </p>
+    </footer>
+
+    <script type="module">
+        // Google Sheet URL
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSuV9C8fJxv69rboto5YrLgAzXmc-8pSDt5_q8_s5C6ucxnGAdsF7W-xfwqtT2Ky0HEqm5x0pq8u_g_/pub?output=csv';
+
+        // --- GLOBAL STATE ---
+        let products = [];
+        let filteredProducts = [];
+        let banners = [];
+        let whatsappNumber = '';
+        let atacadoMinValue = 0;
+        let microMinValue = 0;
+        
+        // --- DOM REFERENCES ---
+        const productList = document.getElementById('product-list');
+        const searchInput = document.getElementById('search-input');
+        const categoryFilter = document.getElementById('category-filter');
+        const sortOrder = document.getElementById('sort-order');
+        const noResultsMessage = document.getElementById('no-results-message');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const carouselTrack = document.getElementById('carousel-track');
+        const whatsappLinkFooter = document.getElementById('whatsapp-link-footer');
+        const atacadoMinDisplay = document.getElementById('atacado-min-value');
+        const microMinDisplay = document.getElementById('micro-min-value');
+        
+        // Inicializa Lucide icons
+        lucide.createIcons();
+
+        // --- Mapeamento e Limpeza de Dados ---
+        
+        /** Mapeamento de categorias conforme solicitado. */
+        function mapCategoryName(rawCategory) {
+            if (!rawCategory) return 'Outras';
+            const clean = rawCategory.trim().toLowerCase();
+            
+            if (clean.includes('h.adulto')) return 'Masculino Adulto';
+            if (clean.includes('h.infantil')) return 'Masculino Infantil';
+            if (clean.includes('m.adulto')) return 'Feminino Adulto';
+            if (clean.includes('m.infantil')) return 'Feminino Infantil';
+            
+            // Padrão: Capitaliza e substitui ponto por espaço
+            return rawCategory.charAt(0).toUpperCase() + rawCategory.slice(1).replace('.', ' ');
+        }
+
+        /** Formata um valor numérico para moeda BRL. */
+        function formatPrice(value) {
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
+        }
+
+        /** Converte o texto CSV em um array de objetos de produto. */
+        function csvToProducts(csvText) {
+            const lines = csvText.split('\n').filter(line => line.trim() !== '');
+            if (lines.length === 0) return [];
+
+            const headers = lines[0].split(',').map(header => header.trim().toLowerCase().replace(/[^a-z0-9]/g, ''));
+            const dataLines = lines.slice(1);
+            
+            const rawProducts = dataLines.map((line, index) => {
+                // Regex ajustada para melhor parsear CSV com campos contendo vírgulas entre aspas
+                const regex = /(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)/g; 
+                const values = [];
+                let match;
+                while (match = regex.exec(line)) {
+                    let value = match[1];
+                    if (value.startsWith(',')) {
+                        value = value.substring(1); 
+                    }
+                    values.push(value);
+                }
+
+                if (values.length < headers.length - 2 || values.length > headers.length + 2) { 
+                    // Avisos de inconsistência removidos para evitar poluição do console
+                }
+                
+                const productValues = values.slice(0, headers.length);
+
+                const product = {};
+                headers.forEach((key, i) => {
+                    const value = productValues[i] ? productValues[i].replace(/"/g, '').trim() : '';
+
+                    if (key.startsWith('preco') || key === 'atacmin' || key === 'micromin') {
+                        const numericValue = value.replace('R$', '').replace(/\./g, '').replace(',', '.').trim();
+                        product[key] = parseFloat(numericValue) || null;
+                    } else if (key === 'tamanhos') {
+                        product[key] = value ? value.split('.').map(t => t.trim()).filter(t => t) : []; 
+                    } else {
+                        product[key] = value;
+                    }
+                });
+                return product;
+            }).filter(p => p !== null && p.nome && p.nome.trim() !== ''); 
+
+            const finalProducts = rawProducts.map((p, index) => ({
+                id: index + 1,
+                codigo: p.ref || `N/A-${index + 1}`,
+                nome: p.nome || '',
+                imagem: p.imagem || '',
+                banner: p.banner || '',
+                preco: p.preco1, // Preco Varejo (Usado como Preco1)
+                preco2: p.preco2, // Preco Atacado
+                preco3: p.preco3, // Preco Microfranquia
+                categoriaRaw: p.categoria || '',
+                categoria: mapCategoryName(p.categoria),
+                tamanhos: p.tamanhos || [],
+                atacMin: p.atacmin,
+                microMin: p.micromin,
+                number: p.number || '',
+            }));
+
+            if (finalProducts.length > 0) {
+                const bannerUrls = finalProducts.map(p => p.banner).filter(b => b && b.startsWith('http'));
+                banners = [...new Set(bannerUrls)].slice(0, 10); 
+
+                const firstProduct = finalProducts.find(p => p.number || p.atacMin || p.microMin);
+                if (firstProduct) {
+                    whatsappNumber = firstProduct.number ? firstProduct.number.replace(/\D/g, '') : ''; 
+                    atacadoMinValue = firstProduct.atacMin || 0;
+                    microMinValue = firstProduct.microMin || 0;
+                }
+            }
+            
+            return finalProducts;
+        }
+
+        // --- Otimização de Performance ---
+        
+        /** Cache para armazenar imagens carregadas */
+        const imageCache = new Map();
+        
+        /** Função otimizada para carregar e cache de imagens */
+        function loadImage(src) {
+            if (imageCache.has(src)) {
+                return Promise.resolve(imageCache.get(src));
+            }
+            
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => {
+                    imageCache.set(src, src);
+                    resolve(src);
+                };
+                img.onerror = () => {
+                    const fallback = 'https://placehold.co/400x400/1a1a2e/e0f2fe?text=Imagem+Indisponível';
+                    imageCache.set(src, fallback);
+                    resolve(fallback);
+                };
+                img.src = src;
+            });
+        }
+
+        // --- Funcionalidades do Carrossel (Loop Infinito e Fluido) ---
+        let currentSlide = 0;
+        let slideInterval;
+
+        function renderBannerCarousel() {
+            carouselTrack.innerHTML = '';
+            const totalOriginalSlides = banners.length;
+            if (totalOriginalSlides === 0) {
+                carouselTrack.innerHTML = `<div class="carousel-slide bg-gray-700 flex items-center justify-center">
+                    <p class="text-xl text-white font-semibold">Carrossel de Banners (1200x480) - Adicione imagens na coluna 'banner'.</p>
+                </div>`;
+                return;
+            }
+
+            const allSlides = [...banners];
+            if (totalOriginalSlides > 0) {
+                allSlides.push(banners[0]); 
+            }
+            const totalTrackLength = allSlides.length;
+            
+            carouselTrack.style.width = `${totalTrackLength * 100}%`;
+            carouselTrack.style.transition = 'transform 0.5s ease-in-out'; 
+
+            allSlides.forEach((url) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.style.width = `${100 / totalTrackLength}%`; 
+                
+                const finalUrl = url || `https://placehold.co/1200x480/374151/d1d5db?text=Imagem+Banner+Indisponível`;
+                
+                slide.innerHTML = `<img src="${finalUrl}" alt="Banner Promocional" class="w-full h-full object-cover rounded-xl" onerror="this.onerror=null; this.src='https://placehold.co/1200x480/374151/d1d5db?text=Imagem+Banner+Indisponível';">`;
+                carouselTrack.appendChild(slide);
+            });
+
+            if (totalOriginalSlides > 1) {
+                startCarousel(totalTrackLength);
+            }
+        }
+
+        function moveCarousel(totalTrackLength) {
+            const totalOriginalSlides = totalTrackLength - 1; 
+            
+            currentSlide++;
+            
+            const offset = -currentSlide * (100 / totalTrackLength); 
+            carouselTrack.style.transform = `translateX(${offset}%)`;
+
+            if (currentSlide === totalOriginalSlides) {
+                setTimeout(() => {
+                    carouselTrack.style.transition = 'none';
+                    carouselTrack.style.transform = 'translateX(0%)'; 
+                    currentSlide = 0;
+                    
+                    setTimeout(() => {
+                        carouselTrack.style.transition = 'transform 0.5s ease-in-out';
+                    }, 50); 
+                }, 500); 
+            }
+        }
+
+        function startCarousel(totalTrackLength) {
+            if (totalTrackLength > 1) {
+                if (slideInterval) clearInterval(slideInterval); 
+                slideInterval = setInterval(() => moveCarousel(totalTrackLength), 5000); // Troca a cada 5 segundos
+            }
+        }
+        
+        // --- End Carrossel ---
+
+        /** Busca o CSV do Google Sheets e atualiza a lista de produtos. */
+        async function fetchProducts() {
+            loadingIndicator.classList.remove('hidden');
+            productList.innerHTML = '';
+            
+            try {
+                const response = await fetch(CSV_URL);
+                if (!response.ok) {
+                    throw new Error(`Erro ao buscar CSV: ${response.statusText}`);
+                }
+                const csvText = await response.text();
+                
+                products = csvToProducts(csvText);
+                
+                if (products.length > 0) {
+                    updateContactAndPolicyInfo();
+                    populateCategories();
+                    renderBannerCarousel();
+                    renderProducts();
+                } else {
+                    noResultsMessage.classList.remove('hidden');
+                    noResultsMessage.querySelector('p').textContent = 'Erro ao carregar ou CSV vazio. Verifique o link e a publicação da planilha.';
+                }
+
+            } catch (error) {
+                console.error("Erro no carregamento de dados (fetch):", error);
+                productList.innerHTML = `<p class="text-red-500 text-center col-span-full">
+                    Falha ao carregar o catálogo. Verifique o link e se a planilha está publicada corretamente.
+                </p>`;
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+        }
+
+        /** Atualiza informações de contato e política no rodapé. */
+        function updateContactAndPolicyInfo() {
+            if (whatsappNumber) {
+                whatsappLinkFooter.href = `https://wa.me/55${whatsappNumber}`; 
+            } else {
+                 whatsappLinkFooter.href = `https://wa.me/5500000000000`; // Placeholder
+            }
+
+            atacadoMinDisplay.textContent = formatPrice(atacadoMinValue);
+            microMinDisplay.textContent = formatPrice(microMinValue);
+
+            lucide.createIcons(); 
+        }
+
+        // Função para preencher o filtro de categorias
+        function populateCategories() {
+            while (categoryFilter.options.length > 1) {
+                categoryFilter.remove(1);
+            }
+            
+            const categories = [...new Set(products.map(p => p.categoria).filter(c => c && c.trim() !== ''))];
+            categories.sort().forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        // Função principal de filtragem e ordenação (Renderização)
+        function renderProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedCategory = categoryFilter.value;
+            const selectedSort = sortOrder.value;
+
+            // 1. Filtragem
+            filteredProducts = products.filter(product => {
+                const matchesSearch = 
+                    (product.nome && product.nome.toLowerCase().includes(searchTerm)) || 
+                    (product.codigo && product.codigo.toLowerCase().includes(searchTerm));
+                
+                const matchesCategory = selectedCategory === 'all' || product.categoria === selectedCategory;
+                
+                return matchesSearch && matchesCategory;
+            });
+
+            // 2. Ordenação
+            filteredProducts.sort((a, b) => {
+                const getBestPrice = (p) => {
+                    const prices = [p.preco, p.preco2, p.preco3].filter(val => val !== null && val > 0);
+                    // Retorna o preço mais baixo ou um valor alto para itens sem preço
+                    return prices.length > 0 ? Math.min(...prices) : (p.preco || 99999);
+                };
+
+                const priceA = getBestPrice(a);
+                const priceB = getBestPrice(b);
+
+                switch (selectedSort) {
+                    case 'price-asc':
+                        return priceA - priceB;
+                    case 'price-desc':
+                        return priceB - priceA;
+                    case 'name-asc':
+                        return (a.nome || '').localeCompare(b.nome || '');
+                    case 'default':
+                    default:
+                        return (a.id || 0) - (b.id || 0);
+                }
+            });
+
+            // 3. Renderização
+            if (filteredProducts.length === 0) {
+                productList.innerHTML = '';
+                noResultsMessage.classList.remove('hidden');
+            } else {
+                noResultsMessage.classList.add('hidden');
+                renderProductCards(filteredProducts);
+            }
+        }
+
+        // Event Listeners
+        searchInput.addEventListener('input', renderProducts);
+        categoryFilter.addEventListener('change', renderProducts);
+        sortOrder.addEventListener('change', renderProducts);
+
+
+        // --- Configuração do Modal de Imagem ---
+        const modal = document.getElementById('image-zoom-modal');
+        const modalImg = document.getElementById('modal-image');
+        const captionText = document.getElementById('modal-caption');
+        const closeButton = document.getElementsByClassName('close-button')[0];
+
+        function openImageModal(imageSrc, caption) {
+            modal.style.display = "flex";
+            modal.style.flexDirection = "column";
+            modal.style.alignItems = "center";
+            modal.style.justifyContent = "center";
+            modalImg.src = imageSrc;
+            captionText.innerHTML = caption;
+            document.addEventListener('keydown', handleEscKey);
+        }
+
+        function closeImageModal() {
+            modal.style.display = "none";
+            document.removeEventListener('keydown', handleEscKey);
+        }
+
+        function handleEscKey(event) {
+            if (event.key === "Escape") {
+                closeImageModal();
+            }
+        }
+
+        closeButton.onclick = closeImageModal;
+        modal.onclick = (event) => {
+            if (event.target === modal) {
+                closeImageModal();
+            }
+        };
+        // --- Fim Configuração do Modal de Imagem ---
+
+
+        // Função para criar o card de um produto
+        function createProductCard(product) {
+            
+            const availablePrices = [product.preco, product.preco2, product.preco3].filter(val => val !== null && val > 0);
+            const retailPrice = product.preco; 
+
+            const bestPrice = availablePrices.length > 0 ? Math.min(...availablePrices) : retailPrice;
+            // Se não tiver preço de atacado e microfranquia, é considerado preço final/promocional.
+            const isPromocional = !product.preco2 && !product.preco3; 
+            
+            const borderClass = isPromocional ? 'promocional-border border-gray-700' : 'border border-gray-700';
+
+            const formattedDisplayPrice = formatPrice(bestPrice);
+
+            let bestPriceSource = '';
+            if (product.preco3 && product.preco3 === bestPrice) {
+                bestPriceSource = 'Microfranquia';
+            } else if (product.preco2 && product.preco2 === bestPrice) {
+                bestPriceSource = 'Atacado';
+            } else if (product.preco && product.preco === bestPrice) {
+                 bestPriceSource = 'Varejo';
+            }
+            
+            let priceDescription = '';
+            if (bestPriceSource === 'Microfranquia') {
+                priceDescription = 'Melhor valor no Microfranquiado.';
+            } else if (bestPriceSource === 'Atacado') {
+                priceDescription = 'Melhor valor no Atacado.';
+            } else {
+                priceDescription = 'Preço de Varejo.';
+            }
+
+            const priceTags = [
+                { label: 'Varejo', price: product.preco, className: 'varejo' },
+                { label: 'Atacado', price: product.preco2, className: 'atacado' },
+                { label: 'Microfranquia', price: product.preco3, className: 'microfranquia' }
+            ].filter(p => p.price && p.price > 0 && p.price !== bestPrice).map(item => `
+                <div class="flex flex-col">
+                    <span class="text-xs font-light text-gray-400 leading-none">${item.label}:</span>
+                    <span class="price-badge ${item.className} mt-0.5">${formatPrice(item.price)}</span>
+                </div>
+            `).join('');
+
+            const imageUrl = product.imagem || `https://placehold.co/400x400/1a1a2e/e0f2fe?text=Imagem+N/A`;
+
+            // Monta o Card
+            const card = document.createElement('div');
+            card.className = `product-card rounded-xl overflow-hidden shadow-lg flex flex-col justify-between ${borderClass}`;
+            card.innerHTML = `
+                <!-- Imagem do Produto (1:1 Aspect Ratio) -->
+                <div class="product-image-container bg-gray-600 flex items-center justify-center relative cursor-pointer">
+                    <img src="${imageUrl}" alt="${product.nome || 'Produto Sem Nome'}" class="rounded-t-xl" onerror="this.onerror=null; this.src='https://placehold.co/400x400/1a1a2e/e0f2fe?text=Imagem+Indisponível';">
+                    
+                    <!-- Placa de Promoção (Vermelha) -->
+                    ${isPromocional ? `
+                        <div class="absolute top-3 right-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-xl transform -rotate-3 border-2 border-white">
+                            PREÇO FINAL
+                        </div>
+                    ` : ''}
+                </div>
+
+                <!-- Conteúdo do Card - Classes responsivas para mobile -->
+                <div class="p-3 sm:p-4 flex flex-col flex-grow product-card-content-mobile">
+                    <!-- Avaliação do Produto REMOVIDA -->
+
+                    <!-- Código e Nome -->
+                    <div class="mb-3">
+                        <p class="text-[10px] sm:text-[11px] font-mono text-purple-400 italic mb-1 leading-none product-code-category-mobile">Cód: ${product.codigo || 'S/N'}</p>
+                        <h2 class="text-base sm:text-lg font-bold text-white mb-1 leading-tight product-name-mobile">${product.nome || 'Produto Não Informado'}</h2>
+                        <p class="text-xs text-gray-400 product-code-category-mobile">${product.categoria || 'Sem Categoria'}</p>
+                    </div>
+
+                    <!-- Preço de Destaque -->
+                    <div class="py-2 border-t border-b border-dashed border-gray-700 mb-3 flex flex-col items-start">
+                        ${bestPriceSource !== 'Varejo' && retailPrice && retailPrice > bestPrice ? 
+                            `<p class="text-xs text-gray-500 line-through mb-0.5">Varejo: ${formatPrice(retailPrice)}</p>`
+                            : `<div class="h-4"></div>`
+                        }
+                        
+                        <p class="text-2xl sm:text-3xl font-extrabold text-accent-color leading-none product-price-mobile">
+                            ${formattedDisplayPrice}
+                        </p>
+                        <p class="text-xs text-gray-400 mt-1">
+                            ${priceDescription}
+                        </p>
+                    </div>
+                    
+                    <!-- Preços Detalhados (Tags) -->
+                    <div class="flex flex-wrap gap-2 mt-auto mb-3">
+                        ${priceTags}
+                    </div>
+
+                    <!-- Tamanhos Disponíveis -->
+                    <div class="mt-2 pt-2 border-t border-dashed border-gray-700">
+                        <p class="text-xs font-semibold text-gray-700 mb-1">Tamanhos:</p>
+                        <div class="flex flex-wrap gap-1">
+                            ${(product.tamanhos || []).map(size => `
+                                <span class="size-badge">
+                                    ${size}
+                                </span>
+                            `).join('') || '<span class="text-xs text-gray-500">N/A</span>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Adiciona o listener de clique na imagem para o zoom
+            const imageContainer = card.querySelector('.product-image-container');
+            imageContainer.addEventListener('click', () => openImageModal(imageUrl, product.nome || 'Detalhe do Produto'));
+
+            // Listeners de Rating REMOVIDOS
+
+            return card;
+        }
+
+        // --- Otimização de Performance para Cards ---
+        
+        /** Função otimizada para renderizar múltiplos cards de produtos de forma eficiente */
+        function renderProductCards(products) {
+            // Usar DocumentFragment para otimizar a inserção no DOM
+            const fragment = document.createDocumentFragment();
+            
+            // Processar os produtos em lotes para evitar bloqueios
+            const batchSize = 20;
+            let index = 0;
+            
+            const processBatch = () => {
+                const batch = products.slice(index, index + batchSize);
+                batch.forEach(product => {
+                    fragment.appendChild(createProductCard(product));
+                });
+                
+                index += batchSize;
+                
+                if (index < products.length) {
+                    // Usar requestAnimationFrame para evitar bloqueios
+                    requestAnimationFrame(processBatch);
+                } else {
+                    // Adicionar todos os cards ao DOM de uma vez
+                    productList.innerHTML = '';
+                    productList.appendChild(fragment);
+                    
+                    // Re-cria os ícones do Lucide após a renderização
+                    lucide.createIcons();
+                }
+            };
+            
+            processBatch();
+        }
+
+        // Inicialização: carrega os dados do CSV antes de tudo
+        document.addEventListener('DOMContentLoaded', fetchProducts);
+
+    </script>
+</body>
+</html>
